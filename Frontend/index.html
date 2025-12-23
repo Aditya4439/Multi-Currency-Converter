@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Multi Currency Converter</title>
+
+    <!-- External CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div class="container">
+
+    <h2>Multi Currency Converter</h2>
+
+    <label>From Currency</label>
+    <select id="fromCurrency">
+        <option>USD</option>
+        <option>INR</option>
+        <option>EUR</option>
+        <option>GBP</option>
+        <option>SGD</option>
+        <option>JPY</option>
+    </select>
+
+    <label>To Currency</label>
+    <select id="toCurrency">
+        <option>USD</option>
+        <option>INR</option>
+        <option>EUR</option>
+        <option>GBP</option>
+        <option>SGD</option>
+        <option>JPY</option>
+    </select>
+
+    <label>Amount</label>
+    <input type="number" id="amount" placeholder="Enter amount">
+
+    <button onclick="convertCurrency()">Convert</button>
+
+    <!-- Output Section -->
+    <div class="result" id="rateResult"></div>
+    <div class="result" id="convertResult"></div>
+
+</div>
+
+<script>
+function convertCurrency() {
+    let from = document.getElementById("fromCurrency").value;
+    let to = document.getElementById("toCurrency").value;
+    let amount = document.getElementById("amount").value;
+
+    fetch(`http://localhost/CurrencyConverter/Back_office/convertCurrency.php?from=${from}&to=${to}&amount=${amount}`)
+        .then(res => res.json())
+        .then(data => {
+            if (data.convertedAmount !== undefined) {
+
+                document.getElementById("rateResult").innerText =
+                    "Exchange Rate: 1 " + from + " = " + data.rate + " " + to;
+
+                document.getElementById("convertResult").innerText =
+                    "Converted Amount: " + amount + " " + from + 
+                    " = " + data.convertedAmount + " " + to;
+
+            } else {
+                document.getElementById("rateResult").innerText = "";
+                document.getElementById("convertResult").innerText =
+                    "Conversion not available";
+            }
+        });
+}
+</script>
+
+</body>
+</html>
